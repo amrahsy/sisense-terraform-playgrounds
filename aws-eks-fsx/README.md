@@ -26,8 +26,8 @@ In this guide, the installation steps are executed from within a vagrant VM. If 
 * [Terraform CLI](https://learn.hashicorp.com/tutorials/terraform/install-cli) - `~> v1.2.2`
 * [Kubectl CLI](https://kubernetes.io/docs/tasks/tools/#kubectl)
 * [HELM CLI](https://helm.sh/docs/intro/install/) - `v3.4.1 or later`
-* (*Optional*) [Vagrant CLI](https://www.vagrantup.com/docs/installation) - `>= 2.2.17`
-* (*Optional*) [VirtualBox](https://www.virtualbox.org/wiki/Downloads) - `>= 6.1.34`
+* (*Optional but recommended*) [Vagrant CLI](https://www.vagrantup.com/docs/installation) - `>= 2.2.17`
+* (*Optional but recommended*) [VirtualBox](https://www.virtualbox.org/wiki/Downloads) - `>= 6.1.34`
 * AWS
     * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) - `v2`
     * [IAM user with programmitic aceess](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html) in your AWS account
@@ -61,7 +61,7 @@ terraform-playground: helm installed into /usr/local/bin/helm
 terraform-playground: Cloning into 'sisense-terraform-playgrounds'...  
 :::
 
-* SSH to the vagrant machine from within the scripts directory using the following command
+* SSH to the vagrant machine using the following command from within the scripts directory 
 ```bash=
 vagrant ssh
 ```
@@ -155,6 +155,24 @@ ssh -i <cluster_id>-key.pem ec2-user@<node-name>
 :::warning
 Sisense installation must be executed from the bastion node because the nodes in the EKS managed node groups are deployed in private subnets
 :::
+
+* Details about the Lustre FSX file-system
+```bash=
+terraform output -raw fsx_dns_name
+terraform output -raw fsx_mount_name
+```
+
+### Cleanup
+---
+* Uninstall Sisense
+* Destroy Terraform resources
+```bash=
+terraform destroy
+```
+* (Optional) Either `halt` or `destroy` the vagrant 
+```bash=
+vagrant halt|destroy
+```
 
 ### Maintainers
 ---
