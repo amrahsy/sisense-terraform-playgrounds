@@ -49,3 +49,8 @@ sudo apt-get update && sudo apt-get install -y terraform
 # Install HELM
 ################################################################################
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 && chmod +x get_helm.sh && DESIRED_VERSION=v3.8.2 ./get_helm.sh
+
+################################################################################
+# Clone sisense-terraform-playgrounds Github repository
+################################################################################
+git clone git@github.com:amrahsy/sisense-terraform-playgrounds.git
