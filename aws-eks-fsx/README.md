@@ -3,16 +3,16 @@
 For better readability, [navigate to the HackMD note](https://hackmd.io/@yug/playground-aws-eks-fsx)
 
 ## Table of Contents
-| Content                               |
-| :--------                             |
-| [Introduction](#Introduction)         |
-| [Requirements](#Requirements)         |
-| [Installation](#Installation)         |
-| [Access](#Access)                     |
-| [Troubleshooting](#Troubleshooting)   |
-| [Configuration](#Configuration)       |
-| [Cleanup](#Cleanup)                   |
-| [Maintainers](#Maintainers)           |
+| Content                                |
+| :--------                              |
+| [Introduction](#Introduction-)         |
+| [Requirements](#Requirements-)         |
+| [Installation](#Installation-)         |
+| [Access](#Access-)                     |
+| [Troubleshooting](#Troubleshooting-)   |
+| [Configuration](#Configuration-)       |
+| [Cleanup](#Cleanup-)                   |
+| [Maintainers](#Maintainers-)           |
 
 ### Introduction :man_in_tuxedo: 
 ---
@@ -152,4 +152,7 @@ ssh -i <cluster_id>-key.pem ec2-user@<node-name>
 Sisense installation must be executed from the bastion node because the nodes in the EKS managed node groups are deployed in private subnets
 :::
 
-### 
+### Maintainers
+---
+Current maintainers:
+- [Yugam Sharma](https://github.com/amrahsy) 
