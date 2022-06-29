@@ -6,17 +6,17 @@
 | [Introduction](#Introduction)         |
 | [Requirements](#Requirements)         |
 | [Installation](#Installation)         |
-| [Acess](#Configuration)       |
+| [Access](#Access)                     |
 | [Troubleshooting](#Troubleshooting)   |
 | [Configuration](#Configuration)       |
-| [Cleanup](#Cleanup)   |
+| [Cleanup](#Cleanup)                   |
 | [Maintainers](#Maintainers)           |
 
-### Introduction
+### Introduction :man_in_tuxedo: 
 ---
 Use this guide to deploy an EKS cluster along with the required infrastructure components (such as `VPC`, `Bastion node`, `Managed Node groups`, `Lustre FSX file-system` etc.)
 
-### Requirements
+### Requirements :spiral_note_pad: 
 ---
 :::info
 In this guide, the installation steps are executed from within a vagrant VM. If you do not prefer to set up the vagrant VM, you must install the required utilities before. 
@@ -30,7 +30,7 @@ In this guide, the installation steps are executed from within a vagrant VM. If 
     * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) - `v2`
     * [IAM user with programmitic aceess](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html) in your AWS account
 
-### Installation
+### Installation :rocket: 
 ---
 
 #### (Optional) Step 1 - Deploy the Vagrant VM
@@ -64,24 +64,24 @@ terraform-playground: Cloning into 'sisense-terraform-playgrounds'...
 vagrant ssh
 ```
 
-### Step 2 - Create a Terraform Cloud account with one organization and no workspaces 
+#### Step 2 - Create a Terraform Cloud account with one organization and no workspaces 
 :::info
 We will use a Terraform Cloud account for remote state management. This will prevent issues when managing terraform state locally. 
 :::
 * [Create an account](https://learn.hashicorp.com/tutorials/terraform/cloud-sign-up#create-an-account)
 * [Create an organization](https://learn.hashicorp.com/tutorials/terraform/cloud-sign-up#create-an-organization)
 
-### Step 3 - Log in to Terraform Cloud from the CLI and create a credentials variable set using AWS IAM credentials
+#### Step 3 - Log in to Terraform Cloud from the CLI and create a credentials variable set using AWS IAM credentials
 :::warning
 If you are using the vagrant VM, the following steps must be executed inside the SSH'd session
 :::
 * [Log in to Terraform Cloud from the CLI](https://learn.hashicorp.com/tutorials/terraform/cloud-login?cloud-get-started)
 * [Create a Credentials Variable Set](https://learn.hashicorp.com/tutorials/terraform/cloud-create-variable-set?in=terraform/cloud-get-started)
 
-### Step 4 - Configure the AWS CLI
+#### Step 4 - Configure the AWS CLI
 Use the values of `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` to configure the AWS CLI with the following command
 ```
 aws configure
 ```
 
-### Step 5 - Execute terraform CLI commands to create the playground
+#### Step 5 - Execute terraform CLI commands to create the playground
