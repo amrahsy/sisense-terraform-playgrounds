@@ -17,7 +17,7 @@ Use this guide to deploy an EKS cluster along with the required infrastructure c
 ### Requirements
 ---
 :::info
-In this guide, the installation steps are executed from within a vagrant VM. If you do not prefer to set up the vagrant VM, you must install the required utilities listed below. 
+In this guide, the installation steps are executed from within a vagrant VM. If you do not prefer to set up the vagrant VM, you must install the required utilities before. 
 :::
 * [Terraform CLI](https://learn.hashicorp.com/tutorials/terraform/install-cli) - `~> v1.2.2`
 * [Kubectl CLI](https://kubernetes.io/docs/tasks/tools/#kubectl)
@@ -51,5 +51,13 @@ vagrant up
 ```
 If the installation is successful, you will see the following lines at the end of the output
 :::success
-
+terraform-playground: Verifying checksum... Done.  
+terraform-playground: Preparing to install helm into /usr/local/bin  
+terraform-playground: helm installed into /usr/local/bin/helm  
+terraform-playground: Cloning into 'sisense-terraform-playgrounds'...  
 :::
+
+* SSH to the vagrant machine from within the scripts directory using the following command
+```
+vagrant ssh
+```
