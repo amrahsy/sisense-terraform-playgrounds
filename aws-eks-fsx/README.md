@@ -167,7 +167,8 @@ terraform output -raw fsx_mount_name
 * Uninstall Sisense
 * Destroy Terraform resources
 ```bash=
-terraform destroy
+terraform apply -refresh-only -auto-approve -var region=<region-name>s
+terraform destroy -var region=<region-name>
 ```
 * (Optional) Either `halt` or `destroy` the vagrant 
 ```bash=
