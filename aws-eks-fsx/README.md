@@ -8,11 +8,11 @@ For better readability, [navigate to the HackMD note](https://hackmd.io/@yug/pla
 | [Introduction](#Introduction-)         |
 | [Requirements](#Requirements-)         |
 | [Installation](#Installation-)         |
-| [Access](#Access-)                     |
+| [Access](#Access)                      |
 | [Troubleshooting](#Troubleshooting-)   |
 | [Configuration](#Configuration-)       |
 | [Cleanup](#Cleanup-)                   |
-| [Maintainers](#Maintainers-)           |
+| [Maintainers](#Maintainers)            |
 
 ### Introduction :man_in_tuxedo: 
 ---
