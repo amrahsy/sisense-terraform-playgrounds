@@ -6,8 +6,10 @@
 | [Introduction](#Introduction)         |
 | [Requirements](#Requirements)         |
 | [Installation](#Installation)         |
-| [Configuration](#Configuration)       |
+| [Acess](#Configuration)       |
 | [Troubleshooting](#Troubleshooting)   |
+| [Configuration](#Configuration)       |
+| [Cleanup](#Cleanup)   |
 | [Maintainers](#Maintainers)           |
 
 ### Introduction
@@ -37,7 +39,7 @@ Disable Zscaler and quit the Zscaler application to build the vagrant VM success
 :::
 * Clone this Github repository on your local machine 
 ```
-git clone git@github.com:amrahsy/sisense-terraform-playgrounds.git
+git clone https://github.com/amrahsy/sisense-terraform-playgrounds.git
 ```
 * Navigate to the following directory
 ```
@@ -61,3 +63,25 @@ terraform-playground: Cloning into 'sisense-terraform-playgrounds'...
 ```
 vagrant ssh
 ```
+
+### Step 2 - Create a Terraform Cloud account with one organization and no workspaces 
+:::info
+We will use a Terraform Cloud account for remote state management. This will prevent issues when managing terraform state locally. 
+:::
+* [Create an account](https://learn.hashicorp.com/tutorials/terraform/cloud-sign-up#create-an-account)
+* [Create an organization](https://learn.hashicorp.com/tutorials/terraform/cloud-sign-up#create-an-organization)
+
+### Step 3 - Log in to Terraform Cloud from the CLI and create a credentials variable set using AWS IAM credentials
+:::warning
+If you are using the vagrant VM, the following steps must be executed inside the SSH'd session
+:::
+* [Log in to Terraform Cloud from the CLI](https://learn.hashicorp.com/tutorials/terraform/cloud-login?cloud-get-started)
+* [Create a Credentials Variable Set](https://learn.hashicorp.com/tutorials/terraform/cloud-create-variable-set?in=terraform/cloud-get-started)
+
+### Step 4 - Configure the AWS CLI
+Use the values of `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` to configure the AWS CLI with the following command
+```
+aws configure
+```
+
+### Step 5 - Execute terraform CLI commands to create the playground
