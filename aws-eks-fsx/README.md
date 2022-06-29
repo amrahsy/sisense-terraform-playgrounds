@@ -107,6 +107,10 @@ terraform {
 terraform init
 ```
 * Create resources
+:::danger
+If you are deploying multiple playgrounds using these instructions, make sure to update the workspace name in **`versions.tf`** before each run (`terraform apply`) to isolated different resources in their respective workspaces.
+
+:::
 ```bash=
 terraform apply -var region=<region-name>
 ```
