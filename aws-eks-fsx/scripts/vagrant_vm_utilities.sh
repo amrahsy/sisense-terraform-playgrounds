@@ -53,4 +53,4 @@ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scr
 ################################################################################
 # Clone sisense-terraform-playgrounds Github repository
 ################################################################################
-git clone https://github.com/amrahsy/sisense-terraform-playgrounds.git
+git clone https://github.com/amrahsy/sisense-terraform-playgrounds.git && sudo chown -R vagrant:vagrant sisense-terraform-playgrounds
