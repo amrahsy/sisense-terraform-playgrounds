@@ -7,7 +7,7 @@ terraform {
       name = "<CHANGE-ME>"
     }
   }
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"

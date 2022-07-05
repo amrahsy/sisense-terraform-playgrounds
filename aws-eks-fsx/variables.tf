@@ -17,7 +17,8 @@ variable "vpc_cidr" {
 ################################################################################
 
 locals {
-  environment_name = "${random_pet.prefix.id}-${random_id.suffix.id}"
+  environment_name          = "${random_pet.prefix.id}-${random_id.suffix.id}"
+  sliced_availability_zones = length("${data.aws_availability_zones.available.names}") >= 4 ? slice("${data.aws_availability_zones.available.names}", 0, 3) : "${data.aws_availability_zones.available.names}"
 }
 
 ################################################################################

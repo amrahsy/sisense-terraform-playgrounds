@@ -1,5 +1,6 @@
 # General
 .vagrant/
+nohup.out
 
 # Local .terraform directories
 **/.terraform/*
