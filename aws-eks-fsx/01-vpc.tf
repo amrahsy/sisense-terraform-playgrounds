@@ -32,7 +32,7 @@ module "vpc" {
 
   name                 = "vpc-${local.environment_name}"
   cidr                 = var.vpc_cidr
-  azs                  = local.sliced_availability_zones                                                               
+  azs                  = local.sliced_availability_zones
   private_subnets      = [for k, v in "${local.sliced_availability_zones}" : cidrsubnet("${var.vpc_cidr}", 8, k + 10)]
   public_subnets       = [for k, v in "${local.sliced_availability_zones}" : cidrsubnet("${var.vpc_cidr}", 8, k + 20)]
   enable_nat_gateway   = true
