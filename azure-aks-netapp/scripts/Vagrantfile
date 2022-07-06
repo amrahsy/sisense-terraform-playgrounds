@@ -1,0 +1,14 @@
+Vagrant.require_version ">= 2.2.17"
+
+Vagrant.configure("2") do |config|
+  config.vm.define "terraform-playground" do |terraform|
+    terraform.vm.box = "ubuntu/focal64"
+    terraform.vm.hostname = "terraform-playground"
+    terraform.vm.provider "virtualbox" do |vb|
+      vb.name = "terraform-playground"
+      vb.memory = 2048
+      vb.cpus = 2
+    end
+    terraform.vm.provision "shell", path: "vagrant_vm_utilities.sh"
+  end
+end
