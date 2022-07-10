@@ -1,0 +1,34 @@
+#!/bin/bash
+
+## Installing pip, unzip, jq, and yq
+sudo yum update -y
+sudo yum -y -q install python3-pip unzip jq && sudo pip3 install yq
+
+## Installing awscli
+curl --silent --location "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install --update
+rm -fr awscliv2* aws*/
+
+## Installing using Repository the Latest Docker Engine for CentOS (https://docs.docker.com/engine/install/centos/)
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo systemctl start docker
+
+# Docker - Post installation steps
+sudo groupadd docker
+sudo usermod -aG docker centos
+
+# Start and enable Services
+sudo systemctl daemon-reload 
+sudo systemctl restart docker
+
+## Disable Swap
+sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+sudo swapoff -a
+
+## On CentOS Stream 8 AWS AMIs, net.bridge.bridge-nf-call-iptables is already set to 1
+
+## Allow TCP Forwarding
+sudo sed -i '/#AllowTcpForwarding yes/s/^#//g' /etc/ssh/sshd_config
