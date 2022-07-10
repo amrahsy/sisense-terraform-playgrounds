@@ -4,7 +4,7 @@ terraform {
     organization = "<CHANGE-ME>"
 
     workspaces {
-      name = "<CHANGE-ME>"
+      name = "aws-ec2-rook_ceph"
     }
   }
 

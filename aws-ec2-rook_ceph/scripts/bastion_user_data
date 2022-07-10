@@ -2,7 +2,7 @@
 
 ## Installing pip, unzip, jq, and yq
 sudo yum update -y
-sudo yum -y -q install python-pip3 unzip jq && sudo pip3 install yq
+sudo yum -y -q install python3-pip unzip jq && sudo pip3 install yq
 
 ## Installing awscli
 curl --silent --location "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -18,3 +18,10 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 ## Installing helm
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 && chmod +x get_helm.sh && DESIRED_VERSION=v3.8.2 ./get_helm.sh
+
+## Install htop, wget, vim
+sudo yum -y install epel-release
+sudo yum update -y
+sudo yum -y install htop
+sudo yum -y install wget
+sudo yum -y install vim

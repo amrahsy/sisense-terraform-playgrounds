@@ -1,26 +1,6 @@
 ################################################################################
 # Data Sources: For Amazon Linux and CentOS Stream 8
 ################################################################################
-data "aws_ami" "amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-kernel-*-hvm-*-x86_64-gp2"]
-  }
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
 data "aws_ami" "centos_stream_8" {
   most_recent = true
   owners      = ["125523088429"]
@@ -91,7 +71,7 @@ locals {
   multiple_instances = {
     bastion = {
       name              = "bastion-${local.environment_name}"
-      ami               = data.aws_ami.amazon_linux.id
+      ami               = data.aws_ami.centos_stream_8.id
       instance_type     = var.bastion_instance_type
       availability_zone = element(module.vpc.azs, 0)
       subnet_id         = element(module.vpc.public_subnets, 0)
@@ -116,6 +96,14 @@ locals {
       root_block_device = [
         {
           volume_type           = "gp2"
+          volume_size           = 20
+          delete_on_termination = true
+        }
+      ]
+      ebs_block_device = [
+        {
+          device_name           = "/dev/sdc"
+          volume_type           = "gp2"
           volume_size           = 250
           delete_on_termination = true
         }
@@ -131,6 +119,14 @@ locals {
       root_block_device = [
         {
           volume_type           = "gp2"
+          volume_size           = 20
+          delete_on_termination = true
+        }
+      ]
+      ebs_block_device = [
+        {
+          device_name           = "/dev/sdc"
+          volume_type           = "gp2"
           volume_size           = 250
           delete_on_termination = true
         }
@@ -145,6 +141,14 @@ locals {
       user_data_base64  = filebase64("./scripts/sisense_node_user_data")
       root_block_device = [
         {
+          volume_type           = "gp2"
+          volume_size           = 20
+          delete_on_termination = true
+        }
+      ]
+      ebs_block_device = [
+        {
+          device_name           = "/dev/sdc"
           volume_type           = "gp2"
           volume_size           = 250
           delete_on_termination = true
@@ -171,6 +175,7 @@ module "ec2-instance" {
   subnet_id         = each.value.subnet_id
   user_data_base64  = each.value.user_data_base64
   root_block_device = lookup(each.value, "root_block_device", [])
+  ebs_block_device  = lookup(each.value, "ebs_block_device", [])
 
   key_name                    = aws_key_pair.sisense_ssh_key_pair.key_name
   vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
