@@ -13,7 +13,7 @@ data "aws_availability_zones" "available" {
 }
 
 ################################################################################
-# Resources: random_pet
+# Resources: random_pet, random_id
 ################################################################################
 resource "random_pet" "prefix" {
   length = 1
