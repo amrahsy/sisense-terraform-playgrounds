@@ -1,7 +1,7 @@
 # Edit cloud block as per details of your Terraform Cloud account
 terraform {
   cloud {
-    organization = "<CHANGE-ME>"
+    organization = "SisensePlayground"
 
     workspaces {
       name = "aws-ec2-rook_ceph"

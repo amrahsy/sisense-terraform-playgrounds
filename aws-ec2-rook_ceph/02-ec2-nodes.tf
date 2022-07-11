@@ -59,7 +59,32 @@ resource "aws_security_group" "allow_ssh" {
   }
 
   tags = {
-    Name = "sisense-${local.environment_name}-sg"
+    Name = "ssh-sisense-${local.environment_name}-sg"
+  }
+}
+
+resource "aws_security_group" "internal_allow_all" {
+  name        = "internal_allow_all"
+  description = "Allow All traffic between the private nodes in the VPC"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    description = "Allow all internal traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [var.vpc_cidr]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "internal-all-sisense-${local.environment_name}-sg"
   }
 }
 
@@ -83,7 +108,6 @@ locals {
           delete_on_termination = true
         }
       ]
-      vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
       associate_public_ip_address = true
     }
     app-qry-1 = {
@@ -178,6 +202,6 @@ module "ec2-instance" {
   ebs_block_device  = lookup(each.value, "ebs_block_device", [])
 
   key_name                    = aws_key_pair.sisense_ssh_key_pair.key_name
-  vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
+  vpc_security_group_ids      = each.key == "bastion" ? [aws_security_group.allow_ssh.id] : [aws_security_group.internal_allow_all.id]
   associate_public_ip_address = each.key == "bastion" ? true : false
 }
