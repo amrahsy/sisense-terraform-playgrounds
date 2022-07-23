@@ -26,16 +26,16 @@ data "aws_ami" "amazon_linux" {
 # Resources: tls_private_key, aws_key_pair, aws_security_group
 ################################################################################
 
-resource "tls_private_key" "bastion_private_key" {
+resource "tls_private_key" "sisense_private_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
-resource "aws_key_pair" "bastion_ssh_key_pair" {
-  key_name   = "bastion-${local.environment_name}"
-  public_key = tls_private_key.bastion_private_key.public_key_openssh
+resource "aws_key_pair" "sisense_ssh_key_pair" {
+  key_name   = "sisense-${local.environment_name}"
+  public_key = tls_private_key.sisense_private_key.public_key_openssh
   tags = {
-    Name = "bastion-${local.environment_name}-key-pair"
+    Name = "sisense-${local.environment_name}-key-pair"
   }
 }
 
@@ -60,7 +60,7 @@ resource "aws_security_group" "allow_ssh" {
   }
 
   tags = {
-    Name = "bastion-${local.environment_name}-sg"
+    Name = "sisense-${local.environment_name}-sg"
   }
 }
 
@@ -79,7 +79,7 @@ module "ec2-instance" {
   instance_type               = var.bastion_instance_type
   subnet_id                   = module.vpc.public_subnets[0]
   vpc_security_group_ids      = [aws_security_group.allow_ssh.id] #module.eks.cluster_primary_security_group_id]
-  key_name                    = aws_key_pair.bastion_ssh_key_pair.key_name
+  key_name                    = aws_key_pair.sisense_ssh_key_pair.key_name
 
   root_block_device = [
     {

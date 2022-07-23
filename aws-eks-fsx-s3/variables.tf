@@ -33,70 +33,54 @@ variable "bastion_instance_type" {
 ################################################################################
 # FSX Shared Storage
 ################################################################################
-# variable "fsx_config" {
-#   type        = map(any)
-#   description = "Configuration of FSX Shared Storage"
-#   default = {
-#     deployment_type             = "PERSISTENT_1"
-#     storage_capacity            = 1200
-#     per_unit_storage_throughput = 200
-#   }
-# }
+variable "fsx_config" {
+  type        = map(any)
+  description = "Configuration of FSX Shared Storage"
+  default = {
+    deployment_type             = "PERSISTENT_1"
+    storage_capacity            = 1200
+    per_unit_storage_throughput = 200
+  }
+}
 
 ################################################################################
 # EKS Cluster
 ################################################################################
 
-# Cluster
 variable "cluster_version" {
   type        = string
   description = "Default version of Kubernetes EKS cluster"
-  default     = "1.21"
-}
-
-variable "cluster_enabled_log_types" {
-  description = "A list of the desired control plane logs to enable. For more information, see Amazon EKS Control Plane Logging documentation (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)"
-  type        = list(string)
-  default     = [] # ["audit", "api", "authenticator"]
-}
-
-
-# CloudWatch Log Group
-variable "create_cloudwatch_log_group" {
-  type        = bool
-  default     = false
-  description = "Determines whether a log group is created by this module for the cluster logs. If not, AWS will automatically create one if logging is enabled"
+  default     = "1.22"
 }
 
 ################################################################################
 # EKS Managed Node Groups
 ################################################################################
-variable "sisense_node_config" {
-  type        = map(any)
-  description = "Configuration about each node in a multi-node cluster"
-  default = {
-    instance_type = "r5d.2xlarge"
-  }
-}
 
-variable "app_query_config" {
+variable "app_qry_config" {
   type        = map(any)
   description = "Configuration of EKS Managed node group for Sisense App Query Nodes"
   default = {
-    instance_type = "m5a.2xlarge"
+    instance_type = "r5d.2xlarge"
     min_size      = 0
     max_size      = 3
     desired_size  = 1
   }
 }
 
-# variable "bld_config" {
-#   type        = map(any)
-#   description = "Configuration of EKS Managed node group for Sisense Build Nodes"
-#   default = {
-#     instance_type = "m5a.2xlarge"
-#     min_size      = 0
-#     max_size      = 3
-#     desired_size  = 1
-#   }
-# }
+variable "bld_config" {
+  type        = map(any)
+  description = "Configuration of EKS Managed node group for Sisense Build Nodes"
+  default = {
+    instance_type = "r5d.2xlarge"
+    min_size      = 0
+    max_size      = 3
+    desired_size  = 1
+  }
+}
+
+variable "s3_full_access_arn" {
+  type = string
+  description = "ARN for S3 Full Access Policy"
+  default = "arn:aws:iam::aws:policy/AmazonS3FullAccess"  
+}

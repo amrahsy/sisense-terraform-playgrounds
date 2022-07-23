@@ -25,67 +25,90 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 18.26.6"
 
-  tags = {
-    terraform_environment_name = "${local.environment_name}"
-  }
-  # Cluster
   cluster_name                    = local.environment_name
   cluster_version                 = var.cluster_version
-  cluster_enabled_log_types       = var.cluster_enabled_log_types
+  vpc_id                          = module.vpc.vpc_id
   subnet_ids                      = module.vpc.private_subnets
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
+  create_cluster_security_group   = false
+  create_node_security_group      = false
 
-  # CloudWatch Log Group
-  create_cloudwatch_log_group = var.create_cloudwatch_log_group
-
-  # Cluster Security Group
-  vpc_id = module.vpc.vpc_id
-  cluster_security_group_additional_rules = {
-    ingress_fsx_storage_tcp = {
-      description = "To node on port 988"
-      protocol    = "tcp"
-      from_port   = 988
-      to_port     = 988
-      type        = "ingress"
-      cidr_blocks = [var.vpc_cidr]
-    }
+  tags = {
+    Environment = "${local.environment_name}"
+    Terraform   = true
   }
 
-  # Node Security Group
-  node_security_group_additional_rules = {
-    ingress_fsx_storage_tcp = {
-      description = "To node on port 988"
-      protocol    = "tcp"
-      from_port   = 988
-      to_port     = 988
-      type        = "ingress"
-      cidr_blocks = [var.vpc_cidr]
-    }
-  }
-
-  # EKS Managed Node Groups
   eks_managed_node_groups = {
     # APP-QRY managed node group one
     app-qry-node-group-one = {
-      tags = {
-        terraform_environment_name = "${local.environment_name}"
+      name                  = "${local.environment_name}-qry-1"
+      create_security_group = false
+      labels = {
+        node-sisense-Application = "true"
+        node-sisense-Query       = "true"
       }
 
       # Launch template
       create_launch_template  = false
-      launch_template_name    = aws_launch_template.external.name
-      launch_template_version = aws_launch_template.external.default_version
+      launch_template_name    = aws_launch_template.app-qry-lt-one.name
+      launch_template_version = aws_launch_template.app-qry-lt-one.default_version
 
-      # EKS Managed Node Group
-      name         = "${local.environment_name}-qry-1"
-      min_size     = "${var.app_query_config["min_size"]}"
-      max_size     = "${var.app_query_config["max_size"]}"
-      desired_size = "${var.app_query_config["desired_size"]}"
-      disk_size    = 100
+      # Autoscaling group
+      min_size     = "${var.app_qry_config["min_size"]}"
+      max_size     = "${var.app_qry_config["max_size"]}"
+      desired_size = "${var.app_qry_config["desired_size"]}"
+
+      tags = {
+        Environment = "${local.environment_name}"
+        Terraform   = true
+      }
+    }
+
+    app-qry-node-group-two = {
+      name                  = "${local.environment_name}-qry-2"
+      create_security_group = false
       labels = {
         node-sisense-Application = "true"
         node-sisense-Query       = "true"
+      }
+
+      # Launch template
+      create_launch_template  = false
+      launch_template_name    = aws_launch_template.app-qry-lt-two.name
+      launch_template_version = aws_launch_template.app-qry-lt-two.default_version
+
+      # Autoscaling group
+      min_size     = "${var.app_qry_config["min_size"]}"
+      max_size     = "${var.app_qry_config["max_size"]}"
+      desired_size = "${var.app_qry_config["desired_size"]}"
+
+      tags = {
+        Environment = "${local.environment_name}"
+        Terraform   = true
+      }
+    }
+
+    build-node-group = {
+      name                  = "${local.environment_name}-bld"
+      create_security_group = false
+      labels = {
+        node-sisense-Build = "true"
+      }
+
+      # Launch template
+      create_launch_template  = false
+      launch_template_name    = aws_launch_template.bld-lt.name
+      launch_template_version = aws_launch_template.bld-lt.default_version
+
+      # Autoscaling group
+      min_size     = "${var.bld_config["min_size"]}"
+      max_size     = "${var.bld_config["max_size"]}"
+      desired_size = "${var.bld_config["desired_size"]}"
+
+      tags = {
+        Environment = "${local.environment_name}"
+        Terraform   = true
       }
     }
   }
