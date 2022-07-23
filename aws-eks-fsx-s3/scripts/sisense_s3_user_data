@@ -1,0 +1,86 @@
+Content-Type: multipart/mixed; boundary="//"
+MIME-Version: 1.0
+
+--//
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="cloud-config.txt"
+
+#cloud-config
+cloud_final_modules:
+- [scripts-user, always]
+
+--//
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; 
+filename="userdata.txt"
+
+yum install -y nvme-cli
+DISK=$(for i in $(lsblk | grep '^nvme' | awk '{print $1}') ; do if ( nvme id-ctrl -v /dev/$i | grep -q 'Amazon EC2 NVMe Instance Storage') ; then echo $i ; fi ; done | tail -1)
+mkdir -p /opt/sisense/local_storage
+mkfs -t xfs /dev/$DISK
+mount /dev/$DISK /opt/sisense/local_storage
+if [ "$(grep /opt/sisense/local_storage /etc/fstab)" == "" ] ; then sudo bash -c "echo $(sudo blkid | grep $DISK | awk '{print $2}') /opt/sisense/local_storage xfs defaults,nofail 0 2 >> /etc/fstab" ; else echo already mounted in fstab ; fi
+mount -a
+
+
+cat <<EOF >/etc/init.d/check-nvme
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides: check-nvme
+# Required-Start: $all
+# Required-Stop:
+# Default-Start: 3 4 5
+# Default-Stop:
+# Short-Description: Verify NvME disk mounted for sisense
+### END INIT INFO
+
+. /etc/init.d/functions
+
+start() {
+DISK=\$(for i in \$(lsblk | grep '^nvme' | awk '{print \$1}') ; do if ( nvme id-ctrl -v /dev/\$i | grep -q 'Amazon EC2 NVMe Instance Storage') ; then echo \$i ; fi ; done | tail -1)
+if [ "\$(lsblk | grep disk | grep \$DISK | grep /opt/sisense/local_storage)" == "" ] ; then
+echo first disk \$DISK not mounted
+if [ "\$(grep /opt/sisense/local_storage /etc/fstab)" != "" ] ; then
+echo cleaning old configuration from fstab
+cat /etc/fstab | grep -v /opt/sisense/local_storage > /tmp/.new.fstab
+cp /etc/fstab /tmp/.old.fstab
+mv -f /tmp/.new.fstab /etc/fstab
+fi
+mkdir -p /opt/sisense/local_storage
+mkfs -t xfs /dev/\$DISK
+mount /dev/\$DISK /opt/sisense/local_storage
+echo \$(sudo blkid | grep \$DISK | awk '{print \$2}') /opt/sisense/local_storage xfs defaults,nofail 0 2 >> /etc/fstab
+fi
+}
+
+case "$1" in
+start)
+start
+;;
+stop)
+;;
+restart)
+start
+;;
+status)
+# code to check status of app comes here
+# example: status program_name
+mount | grep sisense
+;;
+*)
+echo "Usage: $0 {start|stop|status|restart}"
+esac
+
+exit 0
+EOF
+
+chmod 755 /etc/init.d/check-nvme
+sudo chkconfig --add check-nvme
+sudo chkconfig check-nvme on
+service check-nvme start
+
+--//

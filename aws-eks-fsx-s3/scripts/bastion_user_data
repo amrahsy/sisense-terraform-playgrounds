@@ -1,0 +1,25 @@
+#!/bin/bash
+
+## Installing pip, unzip, jq, and yq
+sudo yum update -y
+sudo yum -y -q install python-pip3 unzip jq && sudo pip3 install yq
+
+## Installing awscli
+curl --silent --location "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install --update
+rm -fr awscliv2* aws*/
+
+## Installing eksctl
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+source <(eksctl completion bash) 2>/dev/null
+
+## If you're running the AWS CLI version 1.16.156 or later, then you don't need to install the authenticator. Instead, you can use the aws eks get-token command. 
+
+## Installing kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+## Installing helm
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 && chmod +x get_helm.sh && DESIRED_VERSION=v3.8.2 ./get_helm.sh
